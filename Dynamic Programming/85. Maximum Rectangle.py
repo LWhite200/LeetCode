@@ -40,3 +40,33 @@ class Solution:
 
         
         return maxRect
+
+
+" Even more efficient solution "
+class Solution:
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+        if not matrix or not matrix[0]:
+            return 0
+        
+        rows, cols = len(matrix), len(matrix[0])
+        maxRect = 0
+        dp = [0] * cols
+        stack = []
+
+        for i in range(rows):
+            stack = []
+            for j in range(cols):
+                dp[j] = dp[j] + 1 if matrix[i][j] == "1" else 0
+
+                while stack and dp[stack[-1]] > dp[j]:
+                    h = dp[stack.pop()] 
+                    width = j if not stack else j - stack[-1] - 1
+                    maxRect = max(maxRect, h * width)
+                stack.append(j)
+
+            while stack:
+                h = dp[stack.pop()]
+                width = cols if not stack else cols - stack[-1] - 1
+                maxRect = max(maxRect, h * width)
+
+        return maxRect
