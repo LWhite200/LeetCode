@@ -1,16 +1,13 @@
-" We will go up from zero to n to see the possible amount of combinations each (tree of _ nodes) can have "
-" this is done by calculate the  left and right number of combinations "
-
 class Solution:
-    def numTrees(self, n: int) -> int:
-        dp = [1] * (n + 1)
+    def generate(self, numRows: int) -> List[List[int]]:
+        res = [[1]]
+
+        for _ in range(numRows - 1):
+            dummy_row = [0] + res[-1] + [0]
+            row = []
+
+            for i in range(len(res[-1]) + 1):
+                row.append(dummy_row[i] + dummy_row[i+1])
+            res.append(row)
         
-        for nodes in range(2, n + 1):
-            total = 0
-            for root in range(1, nodes + 1):
-                left = root - 1
-                right = nodes - root
-                total += dp[left] * dp[right]
-            dp[nodes] = total
-        
-        return dp[n]
+        return res
